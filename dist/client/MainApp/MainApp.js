@@ -29,10 +29,6 @@ const MainPage_TileItemsItem = React.memo(function MainPage_TileItemsItem(props)
     const BottomExit = _state.setObject(pathTo('BottomExit'), new Block.State(stateProps(pathTo('BottomExit')).props))
     const LeftEntry = _state.setObject(pathTo('LeftEntry'), new Block.State(stateProps(pathTo('LeftEntry')).props))
     const LeftExit = _state.setObject(pathTo('LeftExit'), new Block.State(stateProps(pathTo('LeftExit')).props))
-    const SideColour2 = _state.setObject(pathTo('SideColour2'), React.useCallback(wrapFn(pathTo('SideColour2'), 'calculation', (tile, position) => {
-        let colourIndex = (position + tile.rotation) % 4
-        return tile.colours[colourIndex]
-    }), []))
     const TileBlock_dropAction = React.useCallback(wrapFn(pathTo('TileBlock'), 'dropAction', async ($droppedItem, $droppedItemId) => {
         Log($item, $itemId, $droppedItem, $droppedItemId)
         await SwapTiles($itemId, $droppedItemId)
@@ -60,7 +56,7 @@ const MainPage_TileItemsItem = React.memo(function MainPage_TileItemsItem(props)
 function MainPage(props) {
     const pathTo = name => props.path + '.' + name
     const {Page, TextElement, Timer, Data, Calculation, Dialog, Button, Block, ItemSet} = Elemento.components
-    const {ItemAt, ForEach, Count, Or, Len, HasSameItems, FindIndex, If, NotNull, Random, Shuffle, Range, Select, Not, IsNull, FirstNotNull, FlatList, List, Last, WithoutItems, First, And, ListContains, Ceiling} = Elemento.globalFunctions
+    const {ItemAt, Or, Len, HasSameItems, FindIndex, If, NotNull, Random, Shuffle, Range, Select, Not, IsNull, FirstNotNull, FlatList, List, Last, WithoutItems, First, And, ListContains, Ceiling} = Elemento.globalFunctions
     const {Reset, Set, Update} = Elemento.appFunctions
     const _state = Elemento.useGetStore()
     const Tiles = _state.setObject(pathTo('Tiles'), new Data.State(stateProps(pathTo('Tiles')).props))
@@ -74,12 +70,6 @@ function MainPage(props) {
     const MaxLength = _state.setObject(pathTo('MaxLength'), new Calculation.State(stateProps(pathTo('MaxLength')).value(9).props))
     const MinLength = _state.setObject(pathTo('MinLength'), new Calculation.State(stateProps(pathTo('MinLength')).value(7).props))
     const GameRunning = _state.setObject(pathTo('GameRunning'), new Calculation.State(stateProps(pathTo('GameRunning')).value(Or(Status == 'Playing', Status == 'Paused')).props))
-    const TileMatchesSides = _state.setObject(pathTo('TileMatchesSides'), React.useCallback(wrapFn(pathTo('TileMatchesSides'), 'calculation', (tile, index) => {
-        return false
-    }), []))
-    const TileMatches = _state.setObject(pathTo('TileMatches'), new Calculation.State(stateProps(pathTo('TileMatches')).value(ForEach(Tiles, ($item, $index) => $index + ':' + TileMatchesSides($item, $index))).props))
-    const TileMatches3 = _state.setObject(pathTo('TileMatches3'), new Calculation.State(stateProps(pathTo('TileMatches3')).value(TileMatchesSides(ItemAt(Tiles, 3), 3)).props))
-    const TileMatchCount = _state.setObject(pathTo('TileMatchCount'), new Calculation.State(stateProps(pathTo('TileMatchCount')).value(Count(Tiles, ($item, $index) => TileMatchesSides($item, $index))).props))
     const Adjacent = _state.setObject(pathTo('Adjacent'), React.useCallback(wrapFn(pathTo('Adjacent'), 'calculation', (index) => {
         let top = If(index >= Cols, () => index - Cols, null)
         let bottom = If(index < TileCount - Cols, () => index + Cols, null)
@@ -99,13 +89,6 @@ function MainPage(props) {
         let tilePos = AdjacentPosition(tilePosition, side)
         return ItemAt(Tiles, tilePos)
     }), [AdjacentPosition, Tiles]))
-    const OnEdge = _state.setObject(pathTo('OnEdge'), React.useCallback(wrapFn(pathTo('OnEdge'), 'calculation', (index) => {
-        let atTop = index < Cols
-        let atBottom = index >= TileCount - Cols
-        let atLeft = index % Cols == 0
-        let atRight = index % Cols == Cols - 1
-        return Or(atTop, atBottom, atLeft, atRight)
-    }), [Cols, TileCount]))
     const Maze = _state.setObject(pathTo('Maze'), React.useCallback(wrapFn(pathTo('Maze'), 'calculation', (visited) => {
         if (Len(visited) == MaxLength) return visited
         let latest = Last(visited)
@@ -269,9 +252,6 @@ function MainPage(props) {
         React.createElement(Calculation, elProps(pathTo('MaxLength')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('MinLength')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('CurrentTileRun')).show(false).props),
-        React.createElement(Calculation, elProps(pathTo('TileMatches')).show(false).styles(elProps(pathTo('TileMatches.Styles')).width('100%').props).props),
-        React.createElement(Calculation, elProps(pathTo('TileMatches3')).label('Tile 3 Matches').show(false).styles(elProps(pathTo('TileMatches3.Styles')).width('100%').props).props),
-        React.createElement(Calculation, elProps(pathTo('TileMatchCount')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('WhenRoundComplete')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('IsRoundComplete')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('IsRunComplete')).show(false).props),
@@ -307,7 +287,6 @@ Click Instructions for full details
 Or Start Game to dive right in!`).props),
     ),
         React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').props).props,
-            React.createElement(TextElement, elProps(pathTo('NumberCorrect')).show(false).content('Correct: ' + Count(Tiles, ($item, $index) => TileMatchesSides($item, $index))).props),
             React.createElement(Block, elProps(pathTo('TileGrid')).layout('horizontal wrapped').styles(elProps(pathTo('TileGrid.Styles')).width('100%').aspectRatio(Cols/Rows).maxWidth('500').border('1px solid gray').gap('0').props).props,
             React.createElement(ItemSet, elProps(pathTo('TileItems')).itemContentComponent(MainPage_TileItemsItem).props),
     ),

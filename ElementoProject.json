@@ -152,46 +152,6 @@
               "kind": "Calculation"
             },
             {
-              "id": "calculation_5",
-              "name": "Tile Matches",
-              "properties": {
-                "calculation": {
-                  "expr": "ForEach(Tiles, $index + ':' + TileMatchesSides($item, $index))"
-                },
-                "styles": {
-                  "width": "100%"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_6",
-              "name": "Tile Matches 3",
-              "properties": {
-                "calculation": {
-                  "expr": "TileMatchesSides(ItemAt(Tiles, 3), 3)"
-                },
-                "styles": {
-                  "width": "100%"
-                },
-                "label": "Tile 3 Matches",
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_7",
-              "name": "Tile Match Count",
-              "properties": {
-                "calculation": {
-                  "expr": "Count(Tiles, TileMatchesSides($item, $index))"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
               "id": "calculation_8",
               "name": "When Round Complete",
               "properties": {
@@ -257,18 +217,6 @@
                 "input1": "tileNo",
                 "calculation": {
                   "expr": "let exitSide = ExitSide(tileNo)\nlet tilePosition = FindIndex(Tiles, tileNo)\nlet nextTile = AdjacentTile(tilePosition, exitSide)\nIf(NotNull(nextTile), If(AreSequential(tileNo, nextTile), nextTile, null), null)"
-                }
-              },
-              "kind": "Function"
-            },
-            {
-              "id": "function_4",
-              "name": "Tile Matches Sides",
-              "properties": {
-                "input1": "tile",
-                "input2": "index",
-                "calculation": {
-                  "expr": "false\n"
                 }
               },
               "kind": "Function"
@@ -348,17 +296,6 @@
                 "input1": "tileNo",
                 "calculation": {
                   "expr": "let nextInRun = NextTile(tileNo)\nIf(NotNull(nextInRun), FlatList(tileNo, TileRun(nextInRun)), List(tileNo))"
-                }
-              },
-              "kind": "Function"
-            },
-            {
-              "id": "function_15",
-              "name": "On Edge",
-              "properties": {
-                "input1": "index",
-                "calculation": {
-                  "expr": "let atTop = index < Cols\nlet atBottom = index >= TileCount - Cols\nlet atLeft = index % Cols == 0\nlet atRight = index % Cols == Cols - 1\nOr(atTop, atBottom, atLeft, atRight)"
                 }
               },
               "kind": "Function"
@@ -642,17 +579,6 @@
               },
               "elements": [
                 {
-                  "id": "text_2",
-                  "name": "Number Correct",
-                  "properties": {
-                    "content": {
-                      "expr": "'Correct: ' + Count(Tiles, TileMatchesSides($item, $index))"
-                    },
-                    "show": false
-                  },
-                  "kind": "Text"
-                },
-                {
                   "id": "block_6",
                   "name": "Tile Grid",
                   "properties": {
@@ -924,18 +850,6 @@
                             }
                           ],
                           "kind": "Block"
-                        },
-                        {
-                          "id": "function_1",
-                          "name": "Side Colour 2",
-                          "properties": {
-                            "input1": "tile",
-                            "input2": "position",
-                            "calculation": {
-                              "expr": "let colourIndex = (position + tile.rotation) % 4\ntile.colours[colourIndex]"
-                            }
-                          },
-                          "kind": "Function"
                         }
                       ],
                       "kind": "ItemSet"
