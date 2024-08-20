@@ -8,12 +8,11 @@ const MainPage_TileItemsItem = React.memo(function MainPage_TileItemsItem(props)
     const parentPathWith = name => Elemento.parentPath(props.path) + '.' + name
     const {$item, $itemId, $index, $selected, onClick} = props
     const {ItemSetItem, Block, TextElement} = Elemento.components
-    const {And, Not, Log, Random, ListContains, If} = Elemento.globalFunctions
+    const {And, Not, Random, ListContains, If} = Elemento.globalFunctions
     const _state = Elemento.useGetStore()
     const Cols = _state.useObject(parentPathWith('Cols'))
     const GameRunning = _state.useObject(parentPathWith('GameRunning'))
     const IsRoundComplete = _state.useObject(parentPathWith('IsRoundComplete'))
-    const SwapTiles = _state.useObject(parentPathWith('SwapTiles'))
     const MazeSequence = _state.useObject(parentPathWith('MazeSequence'))
     const IsMiddle = _state.useObject(parentPathWith('IsMiddle'))
     const IsStart = _state.useObject(parentPathWith('IsStart'))
@@ -29,16 +28,12 @@ const MainPage_TileItemsItem = React.memo(function MainPage_TileItemsItem(props)
     const BottomExit = _state.setObject(pathTo('BottomExit'), new Block.State(stateProps(pathTo('BottomExit')).props))
     const LeftEntry = _state.setObject(pathTo('LeftEntry'), new Block.State(stateProps(pathTo('LeftEntry')).props))
     const LeftExit = _state.setObject(pathTo('LeftExit'), new Block.State(stateProps(pathTo('LeftExit')).props))
-    const TileBlock_dropAction = React.useCallback(wrapFn(pathTo('TileBlock'), 'dropAction', async ($droppedItem, $droppedItemId) => {
-        Log($item, $itemId, $droppedItem, $droppedItemId)
-        await SwapTiles($itemId, $droppedItemId)
-    }), [$item, SwapTiles])
     const canDragItem = And(GameRunning, Not(IsRoundComplete))
     const styles = elProps(pathTo('TileItems.Styles')).aspectRatio('1').width(100 / Cols + '%').border('1px solid blue').boxSizing('border-box').backgroundColor(GameRunning ? 'green' : 'pink').props
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(Block, elProps(pathTo('TileBlock')).layout('positioned').dropAction(TileBlock_dropAction).styles(elProps(pathTo('TileBlock.Styles')).backgroundColor('lightgray').width('100%').height('100%').borderStyle('solid').borderLeftColor('green').boxSizing('border-box').maxHeight('100%').rotate(Random(4) * 0).props).props,
-            React.createElement(TextElement, elProps(pathTo('TileNo')).show(false).styles(elProps(pathTo('TileNo.Styles')).position('absolute').top('0').left('0').props).content($item).props),
+        React.createElement(Block, elProps(pathTo('TileBlock')).layout('positioned').styles(elProps(pathTo('TileBlock.Styles')).backgroundColor('lightgray').width('100%').height('100%').borderStyle('solid').borderLeftColor('green').boxSizing('border-box').maxHeight('100%').rotate(Random(4) * 0).props).props,
+            React.createElement(TextElement, elProps(pathTo('TileNo')).show(true).styles(elProps(pathTo('TileNo.Styles')).position('absolute').top('0').left('0').props).content($item).props),
             React.createElement(Block, elProps(pathTo('Centre')).layout('positioned').show(ListContains(MazeSequence, +$item)).styles(elProps(pathTo('Centre.Styles')).backgroundColor(If(IsMiddle($item), 'yellow', () => If(IsStart($item), 'green', 'orange'))).height('100%').width('100%').clipPath(If(IsMiddle($item), 'circle(12% at center)', 'rect(38% 62% 62% 38%)')).position('absolute').top('0').left('50%').translate('-50%').zIndex(1000).rotate(If(IsStart($item), '45deg')).props).props),
             React.createElement(Block, elProps(pathTo('TopEntry')).layout('positioned').show(EntrySide($item) == 'top').styles(elProps(pathTo('TopEntry.Styles')).backgroundColor('blue').height('100%').width('100%').clipPath('polygon(45% 0, 45% 25%, 38% 25%, 50% 38%, 62% 25%, 55% 25%, 55% 0)').position('absolute').top('0').left('50%').translate('-50%').props).props),
             React.createElement(Block, elProps(pathTo('TopExit')).layout('positioned').show(ExitSide($item) == 'top').styles(elProps(pathTo('TopExit.Styles')).backgroundColor('blue').height('100%').width('100%').clipPath('polygon(45% 50%, 45% 13%, 38% 13%, 50% 0, 62% 13%, 55% 13%, 55% 50%)').position('absolute').top('0').left('0').props).props),
@@ -215,6 +210,10 @@ function MainPage(props) {
         await StartNewGame()
         await Instructions.Close()
     }), [StartNewGame, Instructions])
+    const TileGrid_dropAction = React.useCallback(wrapFn(pathTo('TileGrid'), 'dropAction', async ($droppedItem, $droppedItemId, $droppedOnItem, $droppedOnItemId) => {
+        //Log($droppedItem, $droppedItemId, $droppedOnItem, $droppedOnItemId)
+        await SwapTiles($droppedItemId, $droppedOnItemId)
+    }), [SwapTiles])
     const NewTiles_action = React.useCallback(wrapFn(pathTo('NewTiles'), 'action', async () => {
         await StartNewRound()
     }), [StartNewRound])
@@ -242,7 +241,7 @@ function MainPage(props) {
         React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).fontFamily('fantasy').fontSize('28').color('#039a03').props).content('Jig-Maze').props),
         React.createElement(Timer, elProps(pathTo('GameTimer')).show(false).props),
         React.createElement(Data, elProps(pathTo('Tiles')).display(false).props),
-        React.createElement(Data, elProps(pathTo('MazeSequence')).display(false).props),
+        React.createElement(Data, elProps(pathTo('MazeSequence')).display(0).props),
         React.createElement(Data, elProps(pathTo('Status')).display(false).props),
         React.createElement(Data, elProps(pathTo('Score')).display(false).props),
         React.createElement(Data, elProps(pathTo('RoundSkipped')).display(false).props),
@@ -260,11 +259,10 @@ function MainPage(props) {
             React.createElement(TextElement, elProps(pathTo('InstructionsText')).allowHtml(true).content(`The aim is to move the tiles so that the arrows link up at each side to make a continuous run from the green start diamond to the orange end square.
 
 
-
 You earn points for every tile in a run of 4 or more from the start.
 
 
-If you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can keep the points you have and skip to a new set of tiles.
+If you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can tak the points you have and skip to a new set of tiles.
 
 
 Click Continue when you complete or skip a set of tiles to start again with a new set.
@@ -287,7 +285,7 @@ Click Instructions for full details
 Or Start Game to dive right in!`).props),
     ),
         React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').props).props,
-            React.createElement(Block, elProps(pathTo('TileGrid')).layout('horizontal wrapped').styles(elProps(pathTo('TileGrid.Styles')).width('100%').aspectRatio(Cols/Rows).maxWidth('500').border('1px solid gray').gap('0').props).props,
+            React.createElement(Block, elProps(pathTo('TileGrid')).layout('horizontal wrapped').dropAction(TileGrid_dropAction).styles(elProps(pathTo('TileGrid.Styles')).width('100%').aspectRatio(Cols/Rows).maxWidth('500').border('1px solid gray').gap('0').props).props,
             React.createElement(ItemSet, elProps(pathTo('TileItems')).itemContentComponent(MainPage_TileItemsItem).props),
     ),
             React.createElement(Block, elProps(pathTo('EndedPanel')).layout('vertical').show(Status == 'Ended').props,
