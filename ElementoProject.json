@@ -653,7 +653,7 @@
                                   "left": "0"
                                 },
                                 "show": {
-                                  "expr": "true"
+                                  "expr": "0"
                                 }
                               },
                               "kind": "Text"
