@@ -1,15 +1,12 @@
 {
   "id": "project_1",
-  "name": "Missing Letters",
+  "name": "Maze Jigsaw",
   "properties": {},
   "elements": [
     {
       "id": "app_1",
       "name": "Main App",
-      "properties": {
-        "maxWidth": 500,
-        "fonts": "Chelsea Market"
-      },
+      "properties": {},
       "elements": [
         {
           "id": "page_1",
@@ -17,52 +14,42 @@
           "properties": {},
           "elements": [
             {
-              "id": "data_11",
-              "name": "Max Guesses",
+              "id": "text_18",
+              "name": "Title",
               "properties": {
-                "initialValue": {
-                  "expr": "3"
+                "content": "Jig-Maze",
+                "styles": {
+                  "fontFamily": "fantasy",
+                  "fontSize": "28",
+                  "color": "#039a03"
                 }
               },
-              "kind": "Data"
+              "kind": "Text"
+            },
+            {
+              "id": "timer_1",
+              "name": "Game Timer",
+              "properties": {
+                "period": 180,
+                "interval": 1,
+                "show": false,
+                "endAction": {
+                  "expr": "EndGame()"
+                }
+              },
+              "kind": "Timer"
             },
             {
               "id": "data_3",
-              "name": "Word",
+              "name": "Tiles",
               "properties": {},
               "kind": "Data"
             },
             {
               "id": "data_6",
-              "name": "Positions Shown",
+              "name": "Maze Sequence",
               "properties": {
-                "initialValue": {
-                  "expr": "[]"
-                }
-              },
-              "kind": "Data"
-            },
-            {
-              "id": "data_10",
-              "name": "Gaps Shown",
-              "properties": {
-                "initialValue": {
-                  "expr": "false"
-                }
-              },
-              "kind": "Data"
-            },
-            {
-              "id": "data_8",
-              "name": "Latest Guess",
-              "properties": {},
-              "kind": "Data"
-            },
-            {
-              "id": "data_9",
-              "name": "Number Of Guesses",
-              "properties": {
-                "initialValue": {
+                "display": {
                   "expr": "0"
                 }
               },
@@ -99,110 +86,66 @@
               "kind": "Data"
             },
             {
-              "id": "calculation_15",
-              "name": "Letters",
-              "properties": {
-                "calculation": {
-                  "expr": "Split(Word)"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_17",
-              "name": "All Positions",
-              "properties": {
-                "calculation": {
-                  "expr": "Range(0, Len(Word) - 1)"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_16",
-              "name": "Remaining Positions",
-              "properties": {
-                "calculation": {
-                  "expr": "WithoutItems(AllPositions, PositionsShown)"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
               "id": "calculation_1",
-              "name": "Letters Shown",
+              "name": "Rows",
               "properties": {
                 "calculation": {
-                  "expr": "If(GapsShown, LettersShownWithGaps, LettersShownOnly)"
+                  "expr": "3"
                 },
                 "show": false
               },
               "kind": "Calculation"
             },
             {
-              "id": "calculation_18",
-              "name": "Letters Shown Only",
+              "id": "calculation_2",
+              "name": "Cols",
               "properties": {
                 "calculation": {
-                  "expr": "Select(Letters, ListContains(PositionsShown, $index))"
+                  "expr": "3"
                 },
                 "show": false
               },
               "kind": "Calculation"
             },
             {
-              "id": "calculation_19",
-              "name": "Letters Shown With Gaps",
+              "id": "calculation_3",
+              "name": "Tile Count",
               "properties": {
                 "calculation": {
-                  "expr": "ForEach(Letters, If(ListContains(PositionsShown, $index), $item, '_'))"
+                  "expr": "Rows * Cols"
                 },
                 "show": false
               },
               "kind": "Calculation"
             },
             {
-              "id": "calculation_21",
-              "name": "Used All Guesses",
+              "id": "calculation_10",
+              "name": "Max Length",
               "properties": {
                 "calculation": {
-                  "expr": "Gte(NumberOfGuesses, MaxGuesses)"
+                  "expr": "9"
                 },
                 "show": false
               },
               "kind": "Calculation"
             },
             {
-              "id": "calculation_22",
-              "name": "Shown All Letters",
+              "id": "calculation_13",
+              "name": "Min Length",
               "properties": {
                 "calculation": {
-                  "expr": "Len(RemainingPositions) == 0"
+                  "expr": "7"
                 },
                 "show": false
               },
               "kind": "Calculation"
             },
             {
-              "id": "calculation_14",
-              "name": "Is Round Won",
+              "id": "calculation_11",
+              "name": "Current Tile Run",
               "properties": {
                 "calculation": {
-                  "expr": "Eq(LatestGuess,Word)"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_20",
-              "name": "Is Round Failed",
-              "properties": {
-                "calculation": {
-                  "expr": "And(Not(IsRoundWon), Or(ShownAllLetters, UsedAllGuesses))"
+                  "expr": "TileRun(ItemAt(MazeSequence, 0))"
                 },
                 "show": false
               },
@@ -227,7 +170,18 @@
               "name": "Is Round Complete",
               "properties": {
                 "calculation": {
-                  "expr": "Or(IsRoundWon, IsRoundFailed, RoundSkipped, Not(GameRunning))"
+                  "expr": "Or(IsRunComplete, RoundSkipped)"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_14",
+              "name": "Is Run Complete",
+              "properties": {
+                "calculation": {
+                  "expr": "Len(CurrentTileRun) === Len(MazeSequence)"
                 },
                 "show": false
               },
@@ -245,17 +199,27 @@
               "kind": "Calculation"
             },
             {
-              "id": "timer_1",
-              "name": "Game Timer",
+              "id": "function_24",
+              "name": "Are Sequential",
               "properties": {
-                "period": 180,
-                "interval": 1,
-                "show": false,
-                "endAction": {
-                  "expr": "EndGame()"
+                "input1": "tileNo",
+                "input2": "nextTile",
+                "calculation": {
+                  "expr": "let exit = ExitSide(tileNo)\nlet entry = EntrySide(nextTile)\nlet sides = [exit, entry]\nOr(\n  HasSameItems(sides, ['left', 'right']),\n  HasSameItems(sides, ['right', 'left']),\n  HasSameItems(sides, ['top', 'bottom']),\n  HasSameItems(sides, ['bottom', 'top'])\n)"
                 }
               },
-              "kind": "Timer"
+              "kind": "Function"
+            },
+            {
+              "id": "function_22",
+              "name": "Next Tile",
+              "properties": {
+                "input1": "tileNo",
+                "calculation": {
+                  "expr": "let exitSide = ExitSide(tileNo)\nlet tilePosition = FindIndex(Tiles, tileNo)\nlet nextTile = AdjacentTile(tilePosition, exitSide)\nIf(NotNull(nextTile), If(AreSequential(tileNo, nextTile), nextTile, null), null)"
+                }
+              },
+              "kind": "Function"
             },
             {
               "id": "function_5",
@@ -263,18 +227,7 @@
               "properties": {
                 "input1": "word",
                 "calculation": {
-                  "expr": "let lettersGuessed = Len(RemainingPositions)\nlet penalties = (NumberOfGuesses - 1) * 2\nlet pointsFactor = If(GapsShown, 2, 4)\nlet letterPoints = Math.round(Math.pow(lettersGuessed, 1.3) * pointsFactor) - penalties\nMath.max(letterPoints, 0)\n"
-                }
-              },
-              "kind": "Function"
-            },
-            {
-              "id": "function_12",
-              "name": "Setup New Round",
-              "properties": {
-                "action": true,
-                "calculation": {
-                  "expr": "let word = RandomFrom(WordList())\nLog('word', word)\nSet(Word, word)\nlet positions = Range(0, Len(word) - 1)\nSet(PositionsShown, RandomListFrom(positions, Len(word) / 2))\nReset(YourGuess, LatestGuess, NumberOfGuesses, GapsShown)\n"
+                  "expr": "let run = Len(CurrentTileRun)\nlet bonus = If(IsRunComplete, 30, 0)\nIf(run < 4, 0, run * 10 + bonus)"
                 }
               },
               "kind": "Function"
@@ -295,9 +248,89 @@
               "name": "Start New Round",
               "properties": {
                 "calculation": {
-                  "expr": "Reset(RoundSkipped)\nSetupNewRound()"
+                  "expr": "Reset(RoundSkipped)\nSet(MazeSequence, Maze([Random(TileCount - 1)]))\nSet(Tiles, Shuffle(Range(0, TileCount - 1)))\n//Set(Tiles, Range(0, TileCount - 1))"
                 },
                 "action": true
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_14",
+              "name": "Adjacent",
+              "properties": {
+                "input1": "index",
+                "calculation": {
+                  "expr": "let top = If(index >= Cols, index - Cols, null)\nlet bottom = If(index < TileCount - Cols, index + Cols, null)\nlet left = If(index % Cols > 0, index - 1, null)\nlet right = If(index % Cols < Cols - 1, index + 1, null)\nSelect([top, right, bottom, left], Not(IsNull($item)))"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_23",
+              "name": "Adjacent Tile",
+              "properties": {
+                "input1": "tilePosition",
+                "calculation": {
+                  "expr": "let tilePos = AdjacentPosition(tilePosition, side)\nItemAt(Tiles, tilePos)"
+                },
+                "input2": "side"
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_25",
+              "name": "Adjacent Position",
+              "properties": {
+                "input1": "tilePos",
+                "calculation": {
+                  "expr": "FirstNotNull(\nIf(side == 'top', If(tilePos >= Cols, tilePos - Cols, null)),\nIf(side == 'bottom', If(tilePos < TileCount - Cols, tilePos + Cols, null)),\nIf(side == 'left', If(tilePos % Cols > 0, tilePos - 1, null)),\nIf(side == 'right', If(tilePos % Cols < Cols - 1, tilePos + 1, null))\n)\n"
+                },
+                "input2": "side"
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_26",
+              "name": "Tile Run",
+              "properties": {
+                "input1": "tileNo",
+                "calculation": {
+                  "expr": "let nextInRun = NextTile(tileNo)\nIf(NotNull(nextInRun), FlatList(tileNo, TileRun(nextInRun)), List(tileNo))"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_13",
+              "name": "Maze",
+              "properties": {
+                "input1": "visited",
+                "calculation": {
+                  "expr": "if (Len(visited) == MaxLength) return visited\nlet latest = Last(visited)\nlet possibles = Shuffle(WithoutItems(Adjacent(latest), visited))\nfor(const p of possibles) {\n  let result = Maze(FlatList(visited, p))\n  if (result) return result\n}\nif (Len(visited) >= MinLength) return visited\nreturn null"
+                },
+                "javascript": true
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_16",
+              "name": "Entry Side",
+              "properties": {
+                "input1": "tileNo",
+                "calculation": {
+                  "expr": "let mazePosition = FindIndex(MazeSequence, tileNo)\nlet prevTile = If(Not(IsNull(mazePosition)), ItemAt(MazeSequence, mazePosition - 1))\nFirstNotNull(\n  If (prevTile == tileNo - Cols, 'top'),\n  If (prevTile == tileNo + 1, 'right'),\n  If (prevTile == tileNo + Cols, 'bottom'),\n  If (prevTile == tileNo - 1, 'left')\n)"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_17",
+              "name": "Exit Side",
+              "properties": {
+                "input1": "tileNo",
+                "calculation": {
+                  "expr": "let mazePosition = FindIndex(MazeSequence, tileNo)\nlet nextTile = If(Not(IsNull(mazePosition)), ItemAt(MazeSequence, mazePosition + 1))\nFirstNotNull(\n  If (nextTile == tileNo - Cols, 'top'),\n  If (nextTile == tileNo + 1, 'right'),\n  If (nextTile == tileNo + Cols, 'bottom'),\n  If (nextTile == tileNo - 1, 'left')\n)"
+                }
               },
               "kind": "Function"
             },
@@ -346,45 +379,56 @@
               "kind": "Function"
             },
             {
-              "id": "function_13",
-              "name": "Show New Letter",
+              "id": "function_18",
+              "name": "Swap Tiles",
               "properties": {
+                "input1": "index1",
+                "input2": "index2",
                 "action": true,
                 "calculation": {
-                  "expr": "let nextPosition = RandomFrom(RemainingPositions)\nSet(PositionsShown, FlatList(PositionsShown, nextPosition))"
+                  "expr": "let piece1 = ItemAt(Tiles, index1)\nlet piece2 = ItemAt(Tiles, index2)\nUpdate(Tiles, {[index1]: piece2, [index2]: piece1})"
                 }
               },
               "kind": "Function"
             },
             {
-              "id": "function_14",
-              "name": "Make Guess",
+              "id": "function_19",
+              "name": "Is Start",
               "properties": {
-                "action": true,
+                "input1": "tileNo",
                 "calculation": {
-                  "expr": "Set(LatestGuess, YourGuess)\nSet(NumberOfGuesses, NumberOfGuesses + 1)"
+                  "expr": "tileNo == First(MazeSequence)"
                 }
               },
               "kind": "Function"
             },
             {
-              "id": "text_18",
-              "name": "Title",
+              "id": "function_20",
+              "name": "Is End",
               "properties": {
-                "content": "Mis_ing L_tters",
-                "styles": {
-                  "fontFamily": "Chelsea Market",
-                  "fontSize": "28",
-                  "color": "#039a03"
+                "input1": "tileNo",
+                "calculation": {
+                  "expr": "tileNo == Last(MazeSequence)"
                 }
               },
-              "kind": "Text"
+              "kind": "Function"
+            },
+            {
+              "id": "function_21",
+              "name": "Is Middle",
+              "properties": {
+                "input1": "tileNo",
+                "calculation": {
+                  "expr": "And(ListContains(MazeSequence, tileNo), Not(IsStart(tileNo)), Not(IsEnd(tileNo)))"
+                }
+              },
+              "kind": "Function"
             },
             {
               "id": "dialog_1",
               "name": "Instructions",
               "properties": {
-                "initiallyOpen": false,
+                "initiallyOpen": true,
                 "layout": "vertical",
                 "showCloseButton": true,
                 "styles": {
@@ -396,7 +440,7 @@
                   "id": "text_3",
                   "name": "Instructions Text",
                   "properties": {
-                    "content": "You have to guess words from which you are given about half the letters.  The letters are in order, but you do not know where they come in the word (unless you ask).\n\n\nEnter your guesses - up to three in the box and click the Guess button.  You can also show more letters, and show the gaps in the word.  \n\n\nBut guess what - guesses, showing letters and showing gaps all reduce the number of points you get for the word, so you need to decide whether to use those or just puzzle it out.\n\n\nClick Next Word when you complete or skip a word to get another one.\n\n\nYou have 3 minutes to guess as many words as you can.",
+                    "content": "The aim is to move the tiles so that the arrows link up at each side to make a continuous run from the green start diamond to the orange end square.\n\n\nYou earn points for every tile in a run of 4 or more from the start.\n\n\nIf you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can take the points you have and skip to a new set of tiles.\n\n\nClick Continue when you complete or skip a set of tiles to start again with a new set.\n\n\nYou have 3 minutes in total.",
                     "allowHtml": true
                   },
                   "kind": "Text"
@@ -504,7 +548,7 @@
                     "content": "Welcome!",
                     "styles": {
                       "color": "#039a03",
-                      "fontFamily": "Chelsea Market",
+                      "fontFamily": "fantasy",
                       "fontSize": "28"
                     }
                   },
@@ -514,7 +558,7 @@
                   "id": "text_8",
                   "name": "Ready Text",
                   "properties": {
-                    "content": "Guess words with letters missing.\n\nClick Instructions for full details\n\nOr Start Game to dive straight in!",
+                    "content": "Drag the tiles to arrange them so that the arrows make a continuous path from start to finish.\n\nClick Instructions for full details\n\nOr Start Game to dive right in!",
                     "styles": {
                       "fontSize": "20"
                     }
@@ -539,158 +583,280 @@
               },
               "elements": [
                 {
-                  "id": "text_19",
-                  "name": "Word Letters",
+                  "id": "block_6",
+                  "name": "Tile Grid",
                   "properties": {
-                    "content": {
-                      "expr": "If(IsRoundComplete, Word, Join(LettersShown))"
-                    },
+                    "layout": "horizontal wrapped",
                     "styles": {
-                      "fontSize": "32",
-                      "letterSpacing": "0.2em"
-                    }
-                  },
-                  "kind": "Text"
-                },
-                {
-                  "id": "block_22",
-                  "name": "Word Status",
-                  "properties": {
-                    "layout": "horizontal",
-                    "styles": {
-                      "justifyContent": "space-between",
-                      "width": "20em"
+                      "width": "100%",
+                      "aspectRatio": {
+                        "expr": "Cols/Rows"
+                      },
+                      "maxWidth": "500",
+                      "border": "1px solid gray",
+                      "gap": "0"
+                    },
+                    "dropAction": {
+                      "expr": "//Log($droppedItem, $droppedItemId, $droppedOnItem, $droppedOnItemId)\nSwapTiles($droppedItemId, $droppedOnItemId)"
                     }
                   },
                   "elements": [
                     {
-                      "id": "text_24",
-                      "name": "Points Available",
+                      "id": "itemset_1",
+                      "name": "Tile Items",
                       "properties": {
-                        "content": {
-                          "expr": "Points() + ' points'"
-                        }
-                      },
-                      "kind": "Text"
-                    },
-                    {
-                      "id": "text_25",
-                      "name": "Guesses Remaining",
-                      "properties": {
-                        "content": {
-                          "expr": "(MaxGuesses - NumberOfGuesses) + ' guesses left'"
+                        "itemStyles": {
+                          "aspectRatio": "1",
+                          "width": {
+                            "expr": "100 / Cols + '%'"
+                          },
+                          "border": "1px solid blue",
+                          "boxSizing": "border-box",
+                          "backgroundColor": {
+                            "expr": "GameRunning ? 'green' : 'pink'"
+                          }
                         },
-                        "show": {
-                          "expr": "Not(IsRoundComplete)"
-                        }
-                      },
-                      "kind": "Text"
-                    }
-                  ],
-                  "kind": "Block"
-                },
-                {
-                  "id": "block_21",
-                  "name": "Guess Entry",
-                  "properties": {
-                    "layout": "horizontal wrapped"
-                  },
-                  "elements": [
-                    {
-                      "id": "textinput_1",
-                      "name": "Your Guess",
-                      "properties": {
-                        "styles": {
-                          "fontSize": "28"
-                        }
-                      },
-                      "kind": "TextInput"
-                    },
-                    {
-                      "id": "button_14",
-                      "name": "Guess",
-                      "properties": {
-                        "action": {
-                          "expr": "MakeGuess()"
+                        "items": {
+                          "expr": "Tiles"
                         },
-                        "enabled": {
-                          "expr": "Not(IsRoundComplete)"
+                        "selectable": "none",
+                        "canDragItem": {
+                          "expr": "And(GameRunning, Not(IsRoundComplete))"
                         }
                       },
-                      "kind": "Button"
-                    }
-                  ],
-                  "kind": "Block"
-                },
-                {
-                  "id": "text_21",
-                  "name": "Round Won",
-                  "properties": {
-                    "content": {
-                      "expr": "'Correct! ' + Points() + ' points added'"
-                    },
-                    "show": {
-                      "expr": "IsRoundWon"
-                    }
-                  },
-                  "kind": "Text"
-                },
-                {
-                  "id": "text_22",
-                  "name": "Round Failed",
-                  "properties": {
-                    "content": {
-                      "expr": "'Sorry - ' + If(UsedAllGuesses, 'no more guesses', If(ShownAllLetters, 'all letters shown'))"
-                    },
-                    "show": {
-                      "expr": "IsRoundFailed"
-                    }
-                  },
-                  "kind": "Text"
-                },
-                {
-                  "id": "text_23",
-                  "name": "Round Skipped",
-                  "properties": {
-                    "content": "Skipped",
-                    "show": {
-                      "expr": "RoundSkipped"
-                    }
-                  },
-                  "kind": "Text"
-                },
-                {
-                  "id": "block_20",
-                  "name": "Word Controls",
-                  "properties": {
-                    "layout": "horizontal wrapped"
-                  },
-                  "elements": [
-                    {
-                      "id": "button_12",
-                      "name": "Show Another Letter",
-                      "properties": {
-                        "action": {
-                          "expr": "ShowNewLetter()"
-                        },
-                        "enabled": {
-                          "expr": "Not(IsRoundComplete)"
+                      "elements": [
+                        {
+                          "id": "block_5",
+                          "name": "Tile Block",
+                          "properties": {
+                            "styles": {
+                              "backgroundColor": "lightgray",
+                              "width": "100%",
+                              "height": "100%",
+                              "borderStyle": "solid",
+                              "borderLeftColor": "green",
+                              "boxSizing": "border-box",
+                              "maxHeight": "100%",
+                              "rotate": {
+                                "expr": "Random(4) * 0"
+                              }
+                            },
+                            "layout": "positioned"
+                          },
+                          "elements": [
+                            {
+                              "id": "text_16",
+                              "name": "Tile No",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "0"
+                                },
+                                "show": {
+                                  "expr": "0"
+                                }
+                              },
+                              "kind": "Text"
+                            },
+                            {
+                              "id": "block_18",
+                              "name": "Centre",
+                              "properties": {
+                                "styles": {
+                                  "backgroundColor": {
+                                    "expr": "If(IsMiddle($item), 'yellow', If(IsStart($item), 'green', 'orange'))"
+                                  },
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": {
+                                    "expr": "If(IsMiddle($item), 'circle(12% at center)', 'rect(38% 62% 62% 38%)')"
+                                  },
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "50%",
+                                  "translate": "-50%",
+                                  "zIndex": 1000,
+                                  "rotate": {
+                                    "expr": "If(IsStart($item), '45deg')"
+                                  }
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "ListContains(MazeSequence, +$item)"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_1",
+                              "name": "Top Entry",
+                              "properties": {
+                                "styles": {
+                                  "backgroundColor": "blue",
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(45% 0, 45% 25%, 38% 25%, 50% 38%, 62% 25%, 55% 25%, 55% 0)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "50%",
+                                  "translate": "-50%"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "EntrySide($item) == 'top'"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_14",
+                              "name": "Top Exit",
+                              "properties": {
+                                "styles": {
+                                  "backgroundColor": "blue",
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(45% 50%, 45% 13%, 38% 13%, 50% 0, 62% 13%, 55% 13%, 55% 50%)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "0"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "ExitSide($item) == 'top'"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_2",
+                              "name": "Right Entry",
+                              "properties": {
+                                "styles": {
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(100% 45%, 75% 45%, 75% 38%, 62% 50%, 75% 62%, 75% 55%, 100% 55%)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "backgroundColor": "blue",
+                                  "left": "0"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "EntrySide($item) == 'right'"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_15",
+                              "name": "Right Exit",
+                              "properties": {
+                                "styles": {
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(50% 45%, 87% 45%, 87% 38%, 100% 50%, 87% 62%, 87% 55%, 50% 55%)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "backgroundColor": "blue",
+                                  "left": "0"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "ExitSide($item) == 'right'"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_3",
+                              "name": "Bottom Entry",
+                              "properties": {
+                                "styles": {
+                                  "backgroundColor": "blue",
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(45% 100%, 45% 75%, 38% 75%, 50% 62%, 62% 75%, 55% 75%, 55% 100%)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "0"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "EntrySide($item) == 'bottom'"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_16",
+                              "name": "Bottom Exit",
+                              "properties": {
+                                "styles": {
+                                  "backgroundColor": "blue",
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(45% 50%, 45% 87%, 38% 87%, 50% 100%, 62% 87%, 55% 87%, 55% 50%)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "0"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "ExitSide($item) == 'bottom'"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_4",
+                              "name": "Left Entry",
+                              "properties": {
+                                "styles": {
+                                  "backgroundColor": "blue",
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(0 45%, 25% 45%, 25% 38%, 38% 50%, 25% 62%, 25% 55%, 0 55%)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "0"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "EntrySide($item) == 'left'"
+                                }
+                              },
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_17",
+                              "name": "Left Exit",
+                              "properties": {
+                                "styles": {
+                                  "height": "100%",
+                                  "width": "100%",
+                                  "clipPath": "polygon(50% 45%, 13% 45%, 13% 38%, 0 50%, 13% 62%, 13% 55%, 50% 55%)",
+                                  "position": "absolute",
+                                  "top": "0",
+                                  "left": "0",
+                                  "backgroundColor": "blue"
+                                },
+                                "layout": "positioned",
+                                "show": {
+                                  "expr": "ExitSide($item) == 'left'"
+                                }
+                              },
+                              "kind": "Block"
+                            }
+                          ],
+                          "kind": "Block"
                         }
-                      },
-                      "kind": "Button"
-                    },
-                    {
-                      "id": "button_13",
-                      "name": "Show Gaps",
-                      "properties": {
-                        "action": {
-                          "expr": "Set(GapsShown, true)"
-                        },
-                        "enabled": {
-                          "expr": "Not(IsRoundComplete)"
-                        }
-                      },
-                      "kind": "Button"
+                      ],
+                      "kind": "ItemSet"
                     }
                   ],
                   "kind": "Block"
@@ -708,9 +874,9 @@
                       "id": "text_13",
                       "name": "Title",
                       "properties": {
-                        "content": "Congr_tulati_ns!",
+                        "content": "Congratulations!",
                         "styles": {
-                          "fontFamily": "Chelsea Market",
+                          "fontFamily": "fantasy",
                           "fontSize": "28",
                           "color": "#039a03"
                         }
@@ -740,14 +906,27 @@
                 },
                 {
                   "id": "block_19",
-                  "name": "Round Controls",
+                  "name": "Play Controls",
                   "properties": {
                     "layout": "horizontal"
                   },
                   "elements": [
                     {
+                      "id": "text_17",
+                      "name": "Round Score",
+                      "properties": {
+                        "content": {
+                          "expr": "Points() + ' points!'"
+                        },
+                        "show": {
+                          "expr": "And(GameRunning, IsRoundComplete)"
+                        }
+                      },
+                      "kind": "Text"
+                    },
+                    {
                       "id": "button_9",
-                      "name": "New Round",
+                      "name": "New Tiles",
                       "properties": {
                         "action": {
                           "expr": "StartNewRound()"
@@ -755,8 +934,9 @@
                         "show": {
                           "expr": "Status == 'Playing' && IsRoundComplete"
                         },
-                        "content": "Next word",
-                        "appearance": "filled"
+                        "content": {
+                          "expr": "If(Not(IsRoundComplete), 'Skip to next Set of Tiles', 'Continue to Next Set of Tiles')"
+                        }
                       },
                       "kind": "Button"
                     },
@@ -770,7 +950,7 @@
                         "show": {
                           "expr": "Status == 'Playing' && Not(IsRoundComplete)"
                         },
-                        "content": "Skip this word"
+                        "content": "Skip this Set of Tiles"
                       },
                       "kind": "Button"
                     }
@@ -820,24 +1000,10 @@
               "kind": "Block"
             },
             {
-              "id": "block_23",
-              "name": "Spacer",
-              "properties": {
-                "styles": {
-                  "borderBottom": "2px solid lightgray",
-                  "width": "100%"
-                }
-              },
-              "kind": "Block"
-            },
-            {
               "id": "block_13",
-              "name": "Game Controls",
+              "name": "Controls Layout",
               "properties": {
-                "layout": "horizontal",
-                "styles": {
-                  "paddingTop": "20px"
-                }
+                "layout": "horizontal"
               },
               "elements": [
                 {
@@ -908,15 +1074,6 @@
             }
           ],
           "kind": "Page"
-        },
-        {
-          "id": "functionimport_1",
-          "name": "WordList",
-          "properties": {
-            "source": "words2.js",
-            "exportName": "Words"
-          },
-          "kind": "FunctionImport"
         }
       ],
       "kind": "App"
