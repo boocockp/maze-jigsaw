@@ -262,7 +262,7 @@ function MainPage(props) {
 You earn points for every tile in a run of 4 or more from the start.
 
 
-If you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can tak the points you have and skip to a new set of tiles.
+If you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can take the points you have and skip to a new set of tiles.
 
 
 Click Continue when you complete or skip a set of tiles to start again with a new set.
@@ -276,7 +276,7 @@ You have 3 minutes in total.`).props),
             React.createElement(TextElement, elProps(pathTo('TimeDisplay')).show(GameRunning).styles(elProps(pathTo('TimeDisplay.Styles')).fontSize('inherit').color('green').props).content(Ceiling(GameTimer. remainingTime) + 's left').props),
             React.createElement(TextElement, elProps(pathTo('GameOver')).show(Status == 'Ended').styles(elProps(pathTo('GameOver.Styles')).fontSize('inherit').color('white').backgroundColor('green').padding('0 0.5em').borderRadius('8px').props).content('Game Over').props),
     ),
-        React.createElement(Block, elProps(pathTo('ReadyPanel')).layout('vertical').show(Status == 'Ready').props,
+        React.createElement(Block, elProps(pathTo('ReadyPanel')).layout('vertical').show(Status == 'Ready').styles(elProps(pathTo('ReadyPanel.Styles')).padding('0').props).props,
             React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).color('#039a03').fontFamily('fantasy').fontSize('28').props).content('Welcome!').props),
             React.createElement(TextElement, elProps(pathTo('ReadyText')).styles(elProps(pathTo('ReadyText.Styles')).fontSize('20').props).content(`Drag the tiles to arrange them so that the arrows make a continuous path from start to finish.
 
@@ -284,7 +284,7 @@ Click Instructions for full details
 
 Or Start Game to dive right in!`).props),
     ),
-        React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').props).props,
+        React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').padding('0').props).props,
             React.createElement(Block, elProps(pathTo('TileGrid')).layout('horizontal wrapped').dropAction(TileGrid_dropAction).styles(elProps(pathTo('TileGrid.Styles')).width('100%').aspectRatio(Cols/Rows).maxWidth('500').border('1px solid gray').gap('0').props).props,
             React.createElement(ItemSet, elProps(pathTo('TileItems')).itemContentComponent(MainPage_TileItemsItem).props),
     ),
@@ -299,7 +299,7 @@ Or Start Game to dive right in!`).props),
             React.createElement(Button, elProps(pathTo('SkipRound')).content('Skip this Set of Tiles').appearance('outline').show(Status == 'Playing' && Not(IsRoundComplete)).action(SkipRound_action).props),
     ),
     ),
-        React.createElement(Block, elProps(pathTo('PausePanel')).layout('vertical').show(Status == 'Paused').props,
+        React.createElement(Block, elProps(pathTo('PausePanel')).layout('vertical').show(Status == 'Paused').styles(elProps(pathTo('PausePanel.Styles')).padding('0').props).props,
             React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).color('#7529df').fontFamily('Luckiest Guy').fontSize('28').props).content('Paused...').props),
             React.createElement(TextElement, elProps(pathTo('PauseText')).styles(elProps(pathTo('PauseText.Styles')).fontSize('20').props).content('Click Continue Game to carry on').props),
     ),

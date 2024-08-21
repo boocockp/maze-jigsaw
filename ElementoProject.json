@@ -440,7 +440,7 @@
                   "id": "text_3",
                   "name": "Instructions Text",
                   "properties": {
-                    "content": "The aim is to move the tiles so that the arrows link up at each side to make a continuous run from the green start diamond to the orange end square.\n\n\nYou earn points for every tile in a run of 4 or more from the start.\n\n\nIf you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can tak the points you have and skip to a new set of tiles.\n\n\nClick Continue when you complete or skip a set of tiles to start again with a new set.\n\n\nYou have 3 minutes in total.",
+                    "content": "The aim is to move the tiles so that the arrows link up at each side to make a continuous run from the green start diamond to the orange end square.\n\n\nYou earn points for every tile in a run of 4 or more from the start.\n\n\nIf you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can take the points you have and skip to a new set of tiles.\n\n\nClick Continue when you complete or skip a set of tiles to start again with a new set.\n\n\nYou have 3 minutes in total.",
                     "allowHtml": true
                   },
                   "kind": "Text"
@@ -535,6 +535,9 @@
               "properties": {
                 "show": {
                   "expr": "Status == 'Ready'"
+                },
+                "styles": {
+                  "padding": "0"
                 }
               },
               "elements": [
@@ -574,7 +577,8 @@
                   "expr": "Or(Status == 'Playing', Status == 'Ended')"
                 },
                 "styles": {
-                  "width": "100%"
+                  "width": "100%",
+                  "padding": "0"
                 }
               },
               "elements": [
@@ -962,6 +966,9 @@
               "properties": {
                 "show": {
                   "expr": "Status == 'Paused'"
+                },
+                "styles": {
+                  "padding": "0"
                 }
               },
               "elements": [
