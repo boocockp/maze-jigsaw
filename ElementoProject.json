@@ -630,7 +630,9 @@
                           "name": "Tile Block",
                           "properties": {
                             "styles": {
-                              "backgroundColor": "lightgray",
+                              "backgroundColor": {
+                                "expr": "If(IsRunComplete, 'lightgreen', 'lightgray')"
+                              },
                               "width": "100%",
                               "height": "100%",
                               "borderStyle": "solid",
@@ -920,6 +922,13 @@
                         },
                         "show": {
                           "expr": "And(GameRunning, IsRoundComplete)"
+                        },
+                        "styles": {
+                          "fontSize": "20",
+                          "backgroundColor": "green",
+                          "color": "white",
+                          "padding": "3px 8px",
+                          "borderRadius": "5px"
                         }
                       },
                       "kind": "Text"

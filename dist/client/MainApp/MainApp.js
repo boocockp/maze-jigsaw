@@ -8,11 +8,12 @@ const MainPage_TileItemsItem = React.memo(function MainPage_TileItemsItem(props)
     const parentPathWith = name => Elemento.parentPath(props.path) + '.' + name
     const {$item, $itemId, $index, $selected, onClick} = props
     const {ItemSetItem, Block, TextElement} = Elemento.components
-    const {And, Not, Random, ListContains, If} = Elemento.globalFunctions
+    const {And, Not, If, Random, ListContains} = Elemento.globalFunctions
     const _state = Elemento.useGetStore()
     const Cols = _state.useObject(parentPathWith('Cols'))
     const GameRunning = _state.useObject(parentPathWith('GameRunning'))
     const IsRoundComplete = _state.useObject(parentPathWith('IsRoundComplete'))
+    const IsRunComplete = _state.useObject(parentPathWith('IsRunComplete'))
     const MazeSequence = _state.useObject(parentPathWith('MazeSequence'))
     const IsMiddle = _state.useObject(parentPathWith('IsMiddle'))
     const IsStart = _state.useObject(parentPathWith('IsStart'))
@@ -32,7 +33,7 @@ const MainPage_TileItemsItem = React.memo(function MainPage_TileItemsItem(props)
     const styles = elProps(pathTo('TileItems.Styles')).aspectRatio('1').width(100 / Cols + '%').border('1px solid blue').boxSizing('border-box').backgroundColor(GameRunning ? 'green' : 'pink').props
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(Block, elProps(pathTo('TileBlock')).layout('positioned').styles(elProps(pathTo('TileBlock.Styles')).backgroundColor('lightgray').width('100%').height('100%').borderStyle('solid').borderLeftColor('green').boxSizing('border-box').maxHeight('100%').rotate(Random(4) * 0).props).props,
+        React.createElement(Block, elProps(pathTo('TileBlock')).layout('positioned').styles(elProps(pathTo('TileBlock.Styles')).backgroundColor(If(IsRunComplete, 'lightgreen', 'lightgray')).width('100%').height('100%').borderStyle('solid').borderLeftColor('green').boxSizing('border-box').maxHeight('100%').rotate(Random(4) * 0).props).props,
             React.createElement(TextElement, elProps(pathTo('TileNo')).show(0).styles(elProps(pathTo('TileNo.Styles')).position('absolute').top('0').left('0').props).content($item).props),
             React.createElement(Block, elProps(pathTo('Centre')).layout('positioned').show(ListContains(MazeSequence, +$item)).styles(elProps(pathTo('Centre.Styles')).backgroundColor(If(IsMiddle($item), 'yellow', () => If(IsStart($item), 'green', 'orange'))).height('100%').width('100%').clipPath(If(IsMiddle($item), 'circle(12% at center)', 'rect(38% 62% 62% 38%)')).position('absolute').top('0').left('50%').translate('-50%').zIndex(1000).rotate(If(IsStart($item), '45deg')).props).props),
             React.createElement(Block, elProps(pathTo('TopEntry')).layout('positioned').show(EntrySide($item) == 'top').styles(elProps(pathTo('TopEntry.Styles')).backgroundColor('blue').height('100%').width('100%').clipPath('polygon(45% 0, 45% 25%, 38% 25%, 50% 38%, 62% 25%, 55% 25%, 55% 0)').position('absolute').top('0').left('50%').translate('-50%').props).props),
@@ -294,7 +295,7 @@ Or Start Game to dive right in!`).props),
             React.createElement(TextElement, elProps(pathTo('Whatnext')).content('Click Start Game to have another go').props),
     ),
             React.createElement(Block, elProps(pathTo('PlayControls')).layout('horizontal').props,
-            React.createElement(TextElement, elProps(pathTo('RoundScore')).show(And(GameRunning, IsRoundComplete)).content(Points() + ' points!').props),
+            React.createElement(TextElement, elProps(pathTo('RoundScore')).show(And(GameRunning, IsRoundComplete)).styles(elProps(pathTo('RoundScore.Styles')).fontSize('20').backgroundColor('green').color('white').padding('3px 8px').borderRadius('5px').props).content(Points() + ' points!').props),
             React.createElement(Button, elProps(pathTo('NewTiles')).content(If(Not(IsRoundComplete), 'Skip to next Set of Tiles', 'Continue to Next Set of Tiles')).appearance('outline').show(Status == 'Playing' && IsRoundComplete).action(NewTiles_action).props),
             React.createElement(Button, elProps(pathTo('SkipRound')).content('Skip this Set of Tiles').appearance('outline').show(Status == 'Playing' && Not(IsRoundComplete)).action(SkipRound_action).props),
     ),
