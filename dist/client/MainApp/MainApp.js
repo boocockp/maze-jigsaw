@@ -285,7 +285,7 @@ Click Instructions for full details
 
 Or Start Game to dive right in!`).props),
     ),
-        React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').padding('0').props).props,
+        React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').padding('0').margin('0').props).props,
             React.createElement(Block, elProps(pathTo('TileGrid')).layout('horizontal wrapped').dropAction(TileGrid_dropAction).styles(elProps(pathTo('TileGrid.Styles')).width('100%').aspectRatio(Cols/Rows).maxWidth('500').border('1px solid gray').gap('0').props).props,
             React.createElement(ItemSet, elProps(pathTo('TileItems')).itemContentComponent(MainPage_TileItemsItem).props),
     ),
@@ -323,5 +323,5 @@ export default function MainApp(props) {
     const _state = Elemento.useGetStore()
     const app = _state.setObject('MainApp', new App.State({pages, appContext}))
 
-    return React.createElement(App, {...elProps('MainApp').props},)
+    return React.createElement(App, {...elProps('MainApp').maxWidth(500).props},)
 }

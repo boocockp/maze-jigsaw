@@ -6,7 +6,9 @@
     {
       "id": "app_1",
       "name": "Main App",
-      "properties": {},
+      "properties": {
+        "maxWidth": 500
+      },
       "elements": [
         {
           "id": "page_1",
@@ -578,7 +580,8 @@
                 },
                 "styles": {
                   "width": "100%",
-                  "padding": "0"
+                  "padding": "0",
+                  "margin": "0"
                 }
               },
               "elements": [
