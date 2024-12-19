@@ -972,7 +972,8 @@
                       "borderRadius": "10",
                       "border": "2px solid green",
                       "minWidth": "18em",
-                      "padding": "1em"
+                      "padding": "1em",
+                      "zIndex": 1
                     }
                   },
                   "elements": [
