@@ -285,6 +285,9 @@ function MainPage(props) {
             React.createElement(TextElement, elProps(pathTo('InstructionsText')).allowHtml(true).content(`The aim is to move the tiles so that the arrows link up at each side to make a continuous run from the green start diamond to the orange end square.
 
 
+Drag the tiles to move them.
+
+
 You earn points for every tile in a run of 4 or more from the start.
 
 
@@ -306,7 +309,7 @@ You have 3 minutes in total.`).props),
             React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).color('#039a03').fontFamily('fantasy').fontSize('28').props).content('Welcome!').props),
             React.createElement(TextElement, elProps(pathTo('ReadyText')).styles(elProps(pathTo('ReadyText.Styles')).fontSize('20').props).content(`Drag the tiles to arrange them so that the arrows make a continuous path from start to finish.
 
-Click Instructions for full details
+Click Help for full details
 
 Or Start Game to dive right in!`).props),
     ),

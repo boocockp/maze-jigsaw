@@ -370,7 +370,6 @@
             {
               "id": "function_36",
               "name": "Finish Round",
-              "notes": "Called by standard End Round function",
               "properties": {},
               "kind": "Function"
             },
@@ -529,7 +528,7 @@
                   "id": "text_3",
                   "name": "Instructions Text",
                   "properties": {
-                    "content": "The aim is to move the tiles so that the arrows link up at each side to make a continuous run from the green start diamond to the orange end square.\n\n\nYou earn points for every tile in a run of 4 or more from the start.\n\n\nIf you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can click Skip Maze to take the points you have and skip to a new set of tiles.\n\n\nClick Next Maze when you complete or skip a set of tiles to start again with a new set.\n\n\nYou have 3 minutes in total.",
+                    "content": "The aim is to move the tiles so that the arrows link up at each side to make a continuous run from the green start diamond to the orange end square.\n\n\nDrag the tiles to move them.\n\n\nYou earn points for every tile in a run of 4 or more from the start.\n\n\nIf you get all the tiles in a run, you earn a bonus.  Or if you get stuck, you can click Skip Maze to take the points you have and skip to a new set of tiles.\n\n\nClick Next Maze when you complete or skip a set of tiles to start again with a new set.\n\n\nYou have 3 minutes in total.",
                     "allowHtml": true
                   },
                   "kind": "Text"
@@ -648,7 +647,7 @@
                   "id": "text_8",
                   "name": "Ready Text",
                   "properties": {
-                    "content": "Drag the tiles to arrange them so that the arrows make a continuous path from start to finish.\n\nClick Instructions for full details\n\nOr Start Game to dive right in!",
+                    "content": "Drag the tiles to arrange them so that the arrows make a continuous path from start to finish.\n\nClick Help for full details\n\nOr Start Game to dive right in!",
                     "styles": {
                       "fontSize": "20"
                     }
